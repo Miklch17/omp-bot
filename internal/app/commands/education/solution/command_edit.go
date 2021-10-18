@@ -3,6 +3,7 @@ package solution
 import (
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"github.com/ozonmp/omp-bot/internal/model/education"
 	"github.com/ozonmp/omp-bot/internal/servicedata"
 	"log"
 )
@@ -22,6 +23,6 @@ func (c *SolutionCommander) Edit(inputMsg *tgbotapi.Message){
 		return
 	}
 	servicedata.EditedChat[inputMsg.Chat.ID] = *(servicedata.GetOperationData(idx, servicedata.EditoperationData))
-	TextMsg = product.String() + servicedata.DescriptionNewOrEditCommand
+	TextMsg = product.String() + education.DescriptionNewOrEditCommand
 }
 

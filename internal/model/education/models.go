@@ -4,9 +4,9 @@ import "fmt"
 
 type Solution struct {
 	Id uint64
-	TaskID      uint64
-	StudentID   uint64
-	Description string
+	TaskID      uint64 `json:"task_id"`
+	StudentID   uint64 `json:"student_id"`
+	Description string `json:"description"`
 }
 
 func (c Solution) String() string{
@@ -26,3 +26,17 @@ func init() {
 	Data[7] = Solution{7, 700, 777, "Cool Description 7"}
 }
 
+const
+	DescriptionNewOrEditCommand = "Данные можно заполнить в 3х видах: \n" +
+		"1. 3 строки без каких либо меток: \n"+
+		"   TaskID \n"+
+		"   StudentID \n"+
+		"   Description. \n"+
+		"Все поля должны быть в одном сообщении каждое поле в отдельной строке.\n"+
+		"2. 3 строки с метками, информация по какому полю предоставляется:\n" +
+		"   task_id: 10 \n"+
+		"   student_id: 20 \n"+
+		"   description: Тест для описания\n"+
+		"Все поля должны быть в одном сообщении каждое поле в отдельной строке.\n"+
+		"3. Правильный json заполненный необходимыми данными:\n" +
+		"   {\"task_id\": 123, \"student_id\": 34235, \"description\": \"test Description\"} "
