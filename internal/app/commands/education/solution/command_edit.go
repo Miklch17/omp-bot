@@ -22,7 +22,7 @@ func (c *SolutionCommander) Edit(inputMsg *tgbotapi.Message){
 		return
 	}
 	servicedata.EditedChat[inputMsg.Chat.ID] = *(servicedata.GetOperationData(idx, servicedata.EditoperationData))
-	TextMsg = product.String() + "\n Измененная запись должна содержать поля TaskID, Autor, Title. Все поля "+
+	TextMsg = product.String() + "\n Измененная запись должна содержать поля TaskID, StudentID, Description. Все поля "+
 		"должны быть в одном сообщении каждое поле в отдельной строке."
 }
 

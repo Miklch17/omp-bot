@@ -23,12 +23,17 @@ func (c *SolutionCommander) editCommit(inputMessage *tgbotapi.Message) {
 		TextMsg = "Первая строка не содержит число, повторите ввод, пожалуйста"
 		return
 	}
+	studentID, err := strconv.ParseUint(data[1], 0, 64)
+	if err != nil {
+		TextMsg = "Вторая строка не содержит число, повторите ввод, пожалуйста"
+		return
+	}
 	idx, _ := servicedata.EditedChat[inputMessage.Chat.ID]
 	solution := education.Solution{	}
 	solution.Id = idx.ProductID
 	solution.TaskID = taskID
-	solution.Autor = data[1]
-	solution.Title = data[2]
+	solution.StudentID = studentID
+	solution.Description = data[2]
 	c.SolutionService.Update(idx.ProductID, solution)
 	delete(servicedata.EditedChat, inputMessage.Chat.ID)
 	sol, _ := c.SolutionService.Describe(idx.ProductID)
