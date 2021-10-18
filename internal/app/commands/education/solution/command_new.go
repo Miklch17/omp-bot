@@ -7,8 +7,7 @@ import (
 
 func (c *SolutionCommander) New(inputMsg *tgbotapi.Message){
 	servicedata.EditedChat[inputMsg.Chat.ID] = *(servicedata.GetOperationData(0, servicedata.NewoperationData))
-	TextMsg := "Новая запись должна содержать поля TaskID, StudentID, Description. Все поля "+
-		"должны быть в одном сообщении каждое поле в отдельной строке."
+	TextMsg := "Добавление новой записи.\n" + servicedata.DescriptionNewOrEditCommand
 	c.SendMessage(inputMsg, TextMsg)
 }
 
