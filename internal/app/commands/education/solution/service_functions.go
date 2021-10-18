@@ -21,7 +21,7 @@ func GetArgument(inputMsg *tgbotapi.Message) (uint64, string){
 
 	idx, err := strconv.ParseUint(args, 0, 64)
 	if err != nil {
-		TextMsg := fmt.Sprintf("wrong args %s", args)
+		TextMsg := fmt.Sprintf("За командой должно ID элемента с которым работаем, а полчили \"%s\"", args)
 		log.Println(TextMsg)
 		return 0, TextMsg
 	}
