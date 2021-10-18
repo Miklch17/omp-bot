@@ -9,6 +9,7 @@ import (
 )
 
 func (c *SolutionCommander) Edit(inputMsg *tgbotapi.Message){
+	log.Println("Попытка начать редактирование записи")
 	TextMsg := ""
 	defer func() {
 		c.SendMessage(inputMsg, TextMsg)
@@ -24,5 +25,6 @@ func (c *SolutionCommander) Edit(inputMsg *tgbotapi.Message){
 	}
 	servicedata.EditedChat[inputMsg.Chat.ID] = *(servicedata.GetOperationData(idx, servicedata.EditoperationData))
 	TextMsg = product.String() + education.DescriptionNewOrEditCommand
+	log.Println("Редактирование начали")
 }
 

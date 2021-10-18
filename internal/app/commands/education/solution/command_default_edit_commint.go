@@ -3,9 +3,11 @@ package solution
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/ozonmp/omp-bot/internal/servicedata"
+	"log"
 )
 
 func (c *SolutionCommander) editCommit(inputMessage *tgbotapi.Message) {
+	log.Println("Пытаемся завершить редактирование")
 	TextMsg := ""
 	defer func() {
 		c.SendMessage(inputMessage, TextMsg)
@@ -15,6 +17,10 @@ func (c *SolutionCommander) editCommit(inputMessage *tgbotapi.Message) {
 		delete(servicedata.EditedChat, inputMessage.Chat.ID)
 		sol, _ := c.SolutionService.Describe(solution.Id)
 		TextMsg = "Запись заменена: \n " + sol.String()
-	} else { TextMsg = Text}
+		log.Println("Запись удачно изменена")
+	} else {
+		TextMsg = Text
+		log.Println("Что-то пошло не по плану: ", TextMsg)
+	}
 }
 

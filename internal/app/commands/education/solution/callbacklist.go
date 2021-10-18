@@ -5,10 +5,12 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/ozonmp/omp-bot/internal/app/path"
 	"github.com/ozonmp/omp-bot/internal/service_consts"
+	"log"
 	"strings"
 )
 
 func (c *SolutionCommander) CallbackList(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
+	log.Println("Пытаемся отразить следующую страницу")
 	parsedData := CallbackListData{}
 	json.Unmarshal([]byte(callbackPath.CallbackData), &parsedData)
 	var msg = tgbotapi.NewMessage(
@@ -30,5 +32,6 @@ func (c *SolutionCommander) CallbackList(callback *tgbotapi.CallbackQuery, callb
 				)))
 	}
 	c.bot.Send(msg)
+	log.Println("Следующую страницу отобразили")
 }
 

@@ -2,6 +2,7 @@ package servicedata
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 )
 
@@ -16,6 +17,7 @@ type operationData struct{
 var EditedChat = make(map[int64]operationData, 100)
 
 func GetOperationData(productID uint64, operationType int) *operationData{
+	log.Println("инициализация структуры operationData")
 	return &operationData{
 		ProductID: productID,
 		OperationType: operationType,
@@ -23,6 +25,7 @@ func GetOperationData(productID uint64, operationType int) *operationData{
 }
 
 func (s *operationData) String() string {
+	log.Println("Структура operationData ввиде строки")
 	OperationName := ""
 	switch s.OperationType {
 	case NewoperationData:

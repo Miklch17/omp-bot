@@ -5,12 +5,13 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/ozonmp/omp-bot/internal/model/education"
 	"github.com/ozonmp/omp-bot/internal/servicedata"
+	"log"
 	"strconv"
 	"strings"
 )
 
 func (s *DummySolutionService) CreateNewID() uint64 {
-	//not threadsafe
+	log.Println("Получить следующий ID для записи, скорее всего потокоНЕбезопастна, но потоки еще не проходили")
 	max := uint64(0)
 	for i, _ := range education.Data {
 		if max < i {max = i}
@@ -19,6 +20,7 @@ func (s *DummySolutionService) CreateNewID() uint64 {
 }
 
 func (s *DummySolutionService) Len() uint64 {
+	log.Println("Получаем длинну данных")
 	return uint64(len(education.Data))
 }
 
@@ -26,6 +28,7 @@ const errorMessageFormat = "Внимательно ознакомьтесь с �
 		"3х возможных форматов, повторите ввод заново."
 
 func SimpleInputData(inputMessage *tgbotapi.Message, data []string)  (education.Solution, string){
+	log.Println("Похоже пришло просто 3 строки")
 	TextMsg := ""
 	if len(data) != 3 {
 		TextMsg = errorMessageFormat
@@ -47,10 +50,12 @@ func SimpleInputData(inputMessage *tgbotapi.Message, data []string)  (education.
 	solution.TaskID = taskID
 	solution.StudentID = studentID
 	solution.Description = data[2]
+	log.Println("Похоже пришло просто 3 строки - успешно преобразовали")
 	return solution, TextMsg
 }
 
 func LabelInputData(inputMessage *tgbotapi.Message, data []string)  (education.Solution, string){
+	log.Println("Похоже пришло 3 строки с метками")
 	TextMsg := ""
 	task := ""
 	student := ""
@@ -86,10 +91,12 @@ func LabelInputData(inputMessage *tgbotapi.Message, data []string)  (education.S
 	solution.TaskID = taskID
 	solution.StudentID = studentID
 	solution.Description = description
+	log.Println("Похоже пришло 3 строки с метками - успешно преобразовали")
 	return solution, TextMsg
 }
 
 func (s *DummySolutionService) DecodeMessage(inputMessage *tgbotapi.Message) (education.Solution, string) {
+	log.Println("Пробует разобрать что же нам пришло")
 	TextMsg := ""
 	data := strings.Split(inputMessage.Text, "\n")
 	if strings.Contains(inputMessage.Text, "task_id:") || strings.Contains(inputMessage.Text, "student_id:") ||
@@ -103,6 +110,7 @@ func (s *DummySolutionService) DecodeMessage(inputMessage *tgbotapi.Message) (ed
 		//Тут вариант с json
 		idx, _ := servicedata.EditedChat[inputMessage.Chat.ID]
 		parsedData.Id = idx.ProductID
+		log.Println("пришел json")
 		return parsedData, TextMsg
 	}
 	//Последний возможный вариант с 3 обычными строками

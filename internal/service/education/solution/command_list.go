@@ -2,10 +2,12 @@ package solution
 
 import (
 	"github.com/ozonmp/omp-bot/internal/model/education"
+	"log"
 	"sort"
 )
 
 func (s *DummySolutionService) List(cursor uint64, limit uint64) []string {
+	log.Println("Формируем первую страницу списка")
 	if uint64(len(education.Data)) < cursor {
 		return []string{}
 	}
@@ -23,6 +25,7 @@ func (s *DummySolutionService) List(cursor uint64, limit uint64) []string {
 	for i:= cursor; i < cursor + limit; i++ {
 		res = append(res, rs[i])
 	}
+	log.Println("Первая страница сформирована")
 	return res
 }
 

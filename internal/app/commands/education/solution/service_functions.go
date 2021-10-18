@@ -17,6 +17,7 @@ func (c *SolutionCommander) SendMessage(inputMsg *tgbotapi.Message, msgtext stri
 }
 
 func GetArgument(inputMsg *tgbotapi.Message) (uint64, string){
+	log.Println("Пытаемся получить 1ый аргумент после команда, должно быть число")
 	args := inputMsg.CommandArguments()
 
 	idx, err := strconv.ParseUint(args, 0, 64)
@@ -25,6 +26,7 @@ func GetArgument(inputMsg *tgbotapi.Message) (uint64, string){
 		log.Println(TextMsg)
 		return 0, TextMsg
 	}
+	log.Println("Число найдено")
 	return idx, ""
 }
 

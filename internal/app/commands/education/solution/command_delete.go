@@ -7,6 +7,7 @@ import (
 )
 
 func (c *SolutionCommander) Delete(inputMsg *tgbotapi.Message){
+	log.Println("Попытка удалить документ")
 	TextMsg := ""
 	defer func() {
 		c.SendMessage(inputMsg, TextMsg)
@@ -21,5 +22,6 @@ func (c *SolutionCommander) Delete(inputMsg *tgbotapi.Message){
 		return
 	}
 	TextMsg = "Запись удалена"
+	log.Println("Удаление прошло успешно")
 }
 

@@ -7,6 +7,7 @@ import (
 )
 
 func (c *SolutionCommander) Get(inputMsg *tgbotapi.Message){
+	log.Println("Попытка показать запись")
 	TextMsg := ""
 	defer func() {
 		c.SendMessage(inputMsg, TextMsg)
@@ -21,5 +22,6 @@ func (c *SolutionCommander) Get(inputMsg *tgbotapi.Message){
 		return
 	}
 	TextMsg = product.String()
+	log.Println("Попытка успешна")
 }
 

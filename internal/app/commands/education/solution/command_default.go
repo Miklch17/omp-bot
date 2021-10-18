@@ -7,6 +7,7 @@ import (
 )
 
 func (c *SolutionCommander) Default(inputMessage *tgbotapi.Message) {
+	log.Println("Реакция на текст без комманд, если не идет редактирование или создание новой, то это ошибка")
 	if idx, ok := servicedata.EditedChat[inputMessage.Chat.ID]; ok {
 		switch idx.OperationType {
 		case servicedata.NewoperationData:
