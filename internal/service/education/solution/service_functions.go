@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/ozonmp/omp-bot/internal/model/education"
-	"github.com/ozonmp/omp-bot/internal/servicedata"
+	"github.com/ozonmp/omp-bot/internal/service/education/servicedata"
 	"log"
 	"strconv"
 	"strings"
@@ -13,7 +13,7 @@ import (
 func (s *DummySolutionService) CreateNewID() uint64 {
 	log.Println("Получить следующий ID для записи, скорее всего потокоНЕбезопастна, но потоки еще не проходили")
 	max := uint64(0)
-	for i, _ := range education.Data {
+	for i := range *education.GetData() {
 		if max < i {max = i}
 	}
 	return max + 1
@@ -21,42 +21,47 @@ func (s *DummySolutionService) CreateNewID() uint64 {
 
 func (s *DummySolutionService) Len() uint64 {
 	log.Println("Получаем длинну данных")
-	return uint64(len(education.Data))
+	return uint64(len(*education.GetData()))
 }
 
 const errorMessageFormat = "Внимательно ознакомьтесь с подсказкой, переданные данные не соотвествуют ни одному из " +
 		"3х возможных форматов, повторите ввод заново."
-
+const (
+	taskIDStringNumber = iota
+	studentIDStringNumber
+	descriptionStringNumber
+)
 func SimpleInputData(inputMessage *tgbotapi.Message, data []string)  (education.Solution, string){
 	log.Println("Похоже пришло просто 3 строки")
-	TextMsg := ""
+	textMsg := ""
 	if len(data) != 3 {
-		TextMsg = errorMessageFormat
-		return education.Solution{}, TextMsg
+		textMsg = errorMessageFormat
+		return education.Solution{}, textMsg
 	}
-	taskID, err := strconv.ParseUint(data[0], 0, 64)
+	taskID, err := strconv.ParseUint(data[taskIDStringNumber], 0, 64)
 	if err != nil {
-		TextMsg = errorMessageFormat
-		return education.Solution{}, TextMsg
+		textMsg = errorMessageFormat
+		return education.Solution{}, textMsg
 	}
-	studentID, err := strconv.ParseUint(data[1], 0, 64)
+	studentID, err := strconv.ParseUint(data[studentIDStringNumber], 0, 64)
 	if err != nil {
-		TextMsg = errorMessageFormat
-		return education.Solution{}, TextMsg
+		textMsg = errorMessageFormat
+		return education.Solution{}, textMsg
 	}
-	idx, _ := servicedata.EditedChat[inputMessage.Chat.ID]
-	solution := education.Solution{	}
-	solution.Id = idx.ProductID
-	solution.TaskID = taskID
-	solution.StudentID = studentID
-	solution.Description = data[2]
+	idx, _ := servicedata.GetEditedChatElement(inputMessage.Chat.ID)
 	log.Println("Похоже пришло просто 3 строки - успешно преобразовали")
-	return solution, TextMsg
+	return education.Solution{
+		ID:          idx.ProductID,
+		TaskID:      taskID,
+		StudentID:   studentID,
+		Description: data[descriptionStringNumber],
+	}, textMsg
+
 }
 
 func LabelInputData(inputMessage *tgbotapi.Message, data []string)  (education.Solution, string){
 	log.Println("Похоже пришло 3 строки с метками")
-	TextMsg := ""
+	textMsg := ""
 	task := ""
 	student := ""
 	description := ""
@@ -77,27 +82,27 @@ func LabelInputData(inputMessage *tgbotapi.Message, data []string)  (education.S
 
 	taskID, err := strconv.ParseUint(task, 0, 64)
 	if err != nil {
-		TextMsg = errorMessageFormat
-		return education.Solution{}, TextMsg
+		textMsg = errorMessageFormat
+		return education.Solution{}, textMsg
 	}
 	studentID, err := strconv.ParseUint(student, 0, 64)
 	if err != nil {
-		TextMsg = errorMessageFormat
-		return education.Solution{}, TextMsg
+		textMsg = errorMessageFormat
+		return education.Solution{}, textMsg
 	}
-	idx, _ := servicedata.EditedChat[inputMessage.Chat.ID]
-	solution := education.Solution{	}
-	solution.Id = idx.ProductID
-	solution.TaskID = taskID
-	solution.StudentID = studentID
-	solution.Description = description
+	idx, _ := servicedata.GetEditedChatElement(inputMessage.Chat.ID)
 	log.Println("Похоже пришло 3 строки с метками - успешно преобразовали")
-	return solution, TextMsg
+	return education.Solution{
+		ID:          idx.ProductID,
+		TaskID:      taskID,
+		StudentID:   studentID,
+		Description: description,
+	}, textMsg
 }
 
 func (s *DummySolutionService) DecodeMessage(inputMessage *tgbotapi.Message) (education.Solution, string) {
 	log.Println("Пробует разобрать что же нам пришло")
-	TextMsg := ""
+	textMsg := ""
 	data := strings.Split(inputMessage.Text, "\n")
 	if strings.Contains(inputMessage.Text, "task_id:") || strings.Contains(inputMessage.Text, "student_id:") ||
 		strings.Contains(inputMessage.Text, "description:") && len(data) == 3{
@@ -108,10 +113,10 @@ func (s *DummySolutionService) DecodeMessage(inputMessage *tgbotapi.Message) (ed
 	err := json.Unmarshal([]byte(inputMessage.Text), &parsedData)
 	if err == nil {
 		//Тут вариант с json
-		idx, _ := servicedata.EditedChat[inputMessage.Chat.ID]
-		parsedData.Id = idx.ProductID
+		idx, _ := servicedata.GetEditedChatElement(inputMessage.Chat.ID)
+		parsedData.ID = idx.ProductID
 		log.Println("пришел json")
-		return parsedData, TextMsg
+		return parsedData, textMsg
 	}
 	//Последний возможный вариант с 3 обычными строками
 	return SimpleInputData(inputMessage, data)

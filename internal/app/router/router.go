@@ -3,8 +3,8 @@ package router
 import (
 	"github.com/ozonmp/omp-bot/internal/app/commands/demo"
 	"github.com/ozonmp/omp-bot/internal/app/commands/education"
-	"github.com/ozonmp/omp-bot/internal/service_consts"
-	"github.com/ozonmp/omp-bot/internal/servicedata"
+	"github.com/ozonmp/omp-bot/internal/service/education/serviceconsts"
+	"github.com/ozonmp/omp-bot/internal/service/education/servicedata"
 	"log"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -166,7 +166,7 @@ func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
 		break
 	case "product":
 		break
-	case service_consts.Education:
+	case serviceconsts.Education:
 		c.EducationCommander.HandleCallback(callback, callbackPath)
 		break
 	default:
@@ -178,11 +178,12 @@ func (c *Router) handleMessage(msg *tgbotapi.Message) {
 	var commandPath path.CommandPath
 	var err error
 	//Вот тут тоже не уверен что правильно так реализовывать
-	if _, ok := servicedata.EditedChat[msg.Chat.ID]; ok {
-		commandPath = path.CommandPath{}
-		commandPath.CommandName = ""
-		commandPath.Domain = service_consts.Education
-		commandPath.Subdomain = service_consts.Solution
+	if servicedata.IsHaveEditedChatElement(msg.Chat.ID) {
+		commandPath = path.CommandPath{
+			CommandName: "",
+			Domain:      serviceconsts.Education,
+			Subdomain:   serviceconsts.Solution,
+		}
 	} else {
 		if !msg.IsCommand() {
 			c.showCommandFormat(msg)
@@ -248,7 +249,7 @@ func (c *Router) handleMessage(msg *tgbotapi.Message) {
 		break
 	case "product":
 		break
-	case service_consts.Education:
+	case serviceconsts.Education:
 		c.EducationCommander.HandleCommand(msg, commandPath)
 		break
 	default:

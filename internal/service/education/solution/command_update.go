@@ -8,10 +8,10 @@ import (
 
 func (s *DummySolutionService) Update(SolutionId uint64, Solution education.Solution) error {
 	log.Println("Пытаемся обновить запись")
-	if _, ok := education.Data[SolutionId]; !ok {
+	if _, ok := (*education.GetData())[SolutionId]; !ok {
 		return fmt.Errorf("item not found")
 	}
-	education.Data[SolutionId] = Solution
+	(*education.GetData())[SolutionId] = Solution
 	log.Println("Успешно обновили")
 	return nil
 }

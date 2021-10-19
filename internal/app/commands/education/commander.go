@@ -4,7 +4,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/ozonmp/omp-bot/internal/app/commands/education/solution"
 	"github.com/ozonmp/omp-bot/internal/app/path"
-	"github.com/ozonmp/omp-bot/internal/service_consts"
+	"github.com/ozonmp/omp-bot/internal/service/education/serviceconsts"
 	"log"
 )
 
@@ -13,35 +13,35 @@ type EducationCommander interface {
 	HandleCommand(message *tgbotapi.Message, commandPath path.CommandPath)
 }
 
-type Education_Commander struct {
+type EducationCommanderStruct struct {
 	bot                *tgbotapi.BotAPI
 	SolutionCommander solution.Solution_Commander
 }
 
 func NewEducationCommander(
 	bot *tgbotapi.BotAPI,
-) *Education_Commander {
-	return &Education_Commander{
+) *EducationCommanderStruct {
+	return &EducationCommanderStruct{
 		bot: bot,
 		// SolutionCommander
 		SolutionCommander: solution.NewSolutionCommander(bot),
 	}
 }
 
-func (c *Education_Commander) HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
+func (c *EducationCommanderStruct) HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
 	switch callbackPath.Subdomain {
-	case service_consts.Solution:
+	case serviceconsts.Solution:
 		c.SolutionCommander.HandleCallback(callback, callbackPath)
 	default:
-		log.Printf("Education_Commander.HandleCallback: unknown subdomain - %s", callbackPath.Subdomain)
+		log.Printf("EducationCommanderStruct.HandleCallback: unknown subdomain - %s", callbackPath.Subdomain)
 	}
 }
 
-func (c *Education_Commander) HandleCommand(msg *tgbotapi.Message, commandPath path.CommandPath) {
+func (c *EducationCommanderStruct) HandleCommand(msg *tgbotapi.Message, commandPath path.CommandPath) {
 	switch commandPath.Subdomain {
-	case service_consts.Solution:
+	case serviceconsts.Solution:
 		c.SolutionCommander.HandleCommand(msg, commandPath)
 	default:
-		log.Printf("Education_Commander.HandleCommand: unknown subdomain - %s", commandPath.Subdomain)
+		log.Printf("EducationCommanderStruct.HandleCommand: unknown subdomain - %s", commandPath.Subdomain)
 	}
 }

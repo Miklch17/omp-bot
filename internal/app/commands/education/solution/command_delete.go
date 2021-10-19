@@ -8,20 +8,20 @@ import (
 
 func (c *SolutionCommander) Delete(inputMsg *tgbotapi.Message){
 	log.Println("Попытка удалить документ")
-	TextMsg := ""
+	textMsg := ""
 	defer func() {
-		c.SendMessage(inputMsg, TextMsg)
+		c.SendMessage(inputMsg, textMsg)
 	}()
-	idx, TextMsg := GetArgument(inputMsg)
-	if TextMsg != "" { return}
+	idx, textMsg := GetArgument(inputMsg)
+	if textMsg != "" { return}
 
 	_, err := c.SolutionService.Remove(idx)
 	if err != nil {
-		TextMsg = fmt.Sprintf("fail to get product with idx %d: %v", idx, err)
-		log.Println(TextMsg)
+		textMsg = fmt.Sprintf("fail to get product with idx %d: %v", idx, err)
+		log.Println(textMsg)
 		return
 	}
-	TextMsg = "Запись удалена"
+	textMsg = "Запись удалена"
 	log.Println("Удаление прошло успешно")
 }
 

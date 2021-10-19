@@ -8,20 +8,20 @@ import (
 
 func (c *SolutionCommander) Get(inputMsg *tgbotapi.Message){
 	log.Println("Попытка показать запись")
-	TextMsg := ""
+	textMsg := ""
 	defer func() {
-		c.SendMessage(inputMsg, TextMsg)
+		c.SendMessage(inputMsg, textMsg)
 	}()
-	idx, TextMsg := GetArgument(inputMsg)
-	if TextMsg != "" { return}
+	idx, textMsg := GetArgument(inputMsg)
+	if textMsg != "" { return}
 
 	product, err := c.SolutionService.Describe(idx)
 	if err != nil {
-		TextMsg = fmt.Sprintf("fail to get product with idx %d: %v", idx, err)
-		log.Println(TextMsg)
+		textMsg = fmt.Sprintf("fail to get product with idx %d: %v", idx, err)
+		log.Println(textMsg)
 		return
 	}
-	TextMsg = product.String()
+	textMsg = product.String()
 	log.Println("Попытка успешна")
 }
 

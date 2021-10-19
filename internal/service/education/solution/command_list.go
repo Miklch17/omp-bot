@@ -8,16 +8,16 @@ import (
 
 func (s *DummySolutionService) List(cursor uint64, limit uint64) []string {
 	log.Println("Формируем первую страницу списка")
-	if uint64(len(education.Data)) < cursor {
+	if uint64(len(*education.GetData())) < cursor {
 		return []string{}
 	}
-	if uint64(len(education.Data)) < cursor + limit {
-		limit = uint64(len(education.Data)) - cursor
+	if uint64(len(*education.GetData())) < cursor + limit {
+		limit = uint64(len(*education.GetData())) - cursor
 	}
 	//Наверное есть более правильный метод, но я не смог придумать как из мапы вернуть элементы, а если через массив
 	//делать то сильно усложняются другие методы
-	rs := make([]string, 0, len(education.Data))
-	for _, v := range education.Data {
+	rs := make([]string, 0, len(*education.GetData()))
+	for _, v := range *education.GetData() {
 		rs = append(rs, v.String())
 	}
 	sort.Strings(rs)

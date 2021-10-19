@@ -1,4 +1,4 @@
-package service_consts
+package serviceconsts
 
 const Education = "education"
 const Solution = "solution"

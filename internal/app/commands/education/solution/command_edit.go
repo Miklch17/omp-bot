@@ -4,27 +4,27 @@ import (
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/ozonmp/omp-bot/internal/model/education"
-	"github.com/ozonmp/omp-bot/internal/servicedata"
+	"github.com/ozonmp/omp-bot/internal/service/education/servicedata"
 	"log"
 )
 
 func (c *SolutionCommander) Edit(inputMsg *tgbotapi.Message){
 	log.Println("Попытка начать редактирование записи")
-	TextMsg := ""
+	textMsg := ""
 	defer func() {
-		c.SendMessage(inputMsg, TextMsg)
+		c.SendMessage(inputMsg, textMsg)
 	}()
-	idx, TextMsg := GetArgument(inputMsg)
-	if TextMsg != "" { return}
+	idx, textMsg := GetArgument(inputMsg)
+	if textMsg != "" { return}
 
 	product, err := c.SolutionService.Describe(idx)
 	if err != nil {
-		TextMsg = fmt.Sprintf("fail to get product with idx %d: %v", idx, err)
-		log.Println(TextMsg)
+		textMsg = fmt.Sprintf("fail to get product with idx %d: %v", idx, err)
+		log.Println(textMsg)
 		return
 	}
-	servicedata.EditedChat[inputMsg.Chat.ID] = *(servicedata.GetOperationData(idx, servicedata.EditoperationData))
-	TextMsg = product.String() + education.DescriptionNewOrEditCommand
+	servicedata.AddOperationDataInEditedChat(inputMsg.Chat.ID, idx, servicedata.EditOperationData)
+	textMsg = product.String() + education.DescriptionNewOrEditCommand
 	log.Println("Редактирование начали")
 }
 

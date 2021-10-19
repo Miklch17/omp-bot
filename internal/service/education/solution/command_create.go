@@ -8,10 +8,10 @@ import (
 
 func (s *DummySolutionService) Create(SolutionId uint64, Solution education.Solution) (uint64, error) {
 	log.Println("Пытаемся добавить элемент в набор данных")
-	if _, ok := education.Data[SolutionId]; ok {
+	if _, ok := (*education.GetData())[SolutionId]; ok {
 		return 0, fmt.Errorf("item already exists")
 	}
-	education.Data[SolutionId] = Solution
+	(*education.GetData())[SolutionId] = Solution
 	log.Println("Элемент успешно добавлен")
 	return SolutionId, nil
 }
