@@ -2,7 +2,7 @@ package solution
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	"github.com/ozonmp/omp-bot/internal/service/education/servicedata"
+	"github.com/ozonmp/omp-bot/internal/service/education"
 	"log"
 )
 
@@ -14,7 +14,7 @@ func (c *SolutionCommander) editCommit(inputMessage *tgbotapi.Message) {
 	}()
 	if solution, Text := c.SolutionService.DecodeMessage(inputMessage); Text == ""{
 		c.SolutionService.Update(solution.ID, solution)
-		servicedata.DeleteEditedChatElement(inputMessage.Chat.ID)
+		education.DeleteEditedChatElement(inputMessage.Chat.ID)
 		sol, _ := c.SolutionService.Describe(solution.ID)
 		textMsg = "Запись заменена: \n " + sol.String()
 		log.Println("Запись удачно изменена")

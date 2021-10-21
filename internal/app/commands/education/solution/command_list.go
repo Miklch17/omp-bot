@@ -4,19 +4,23 @@ import (
 	"encoding/json"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/ozonmp/omp-bot/internal/app/path"
-	"github.com/ozonmp/omp-bot/internal/service/education/serviceconsts"
+	"github.com/ozonmp/omp-bot/internal/service/education"
 	"log"
 	"strings"
 )
 
+const (
+	StartShowElementNumber = 0
+	OffsetShowElementNumber = 2
+)
 func (c *SolutionCommander) List(inputMsg *tgbotapi.Message){
 	log.Println("Пытаемся отразить 1 страницу списка и кнопку продолжения")
-	cb := CallbackListData{ 0, 2}
+	cb := CallbackListData{ StartShowElementNumber, OffsetShowElementNumber}
 	data, _ := json.Marshal(cb)
 
 	callbackPath := path.CallbackPath{
-		Domain:       serviceconsts.Education,
-		Subdomain:    serviceconsts.Solution,
+		Domain:       education.Education,
+		Subdomain:    education.Solution,
 		CallbackName: "list",
 		CallbackData: string(data),
 	}

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/ozonmp/omp-bot/internal/app/path"
-	"github.com/ozonmp/omp-bot/internal/service/education/serviceconsts"
+	"github.com/ozonmp/omp-bot/internal/service/education"
 	"log"
 	"strings"
 )
@@ -21,8 +21,8 @@ func (c *SolutionCommander) CallbackList(callback *tgbotapi.CallbackQuery, callb
 	if c.SolutionService.Len() > parsedData.Start + parsedData.Offset {
 		data, _ := json.Marshal(parsedData)
 		callbackData := path.CallbackPath{
-			Domain:       serviceconsts.Education,
-			Subdomain:    serviceconsts.Solution,
+			Domain:       education.Education,
+			Subdomain:    education.Solution,
 			CallbackName: "list",
 			CallbackData: string(data),
 		}

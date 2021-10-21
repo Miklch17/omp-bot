@@ -2,7 +2,7 @@ package solution
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	"github.com/ozonmp/omp-bot/internal/service/education/servicedata"
+	"github.com/ozonmp/omp-bot/internal/service/education"
 	"log"
 )
 
@@ -19,7 +19,7 @@ func (c *SolutionCommander) newCommit(inputMessage *tgbotapi.Message) {
 			log.Println("Ошибка при добавлении записи")
 			return
 		}
-		servicedata.DeleteEditedChatElement(inputMessage.Chat.ID)
+		education.DeleteEditedChatElement(inputMessage.Chat.ID)
 		sol, ok := c.SolutionService.Describe(solution.ID)
 		if ok != nil{
 			textMsg = "Не смогли получить добавленную запись"

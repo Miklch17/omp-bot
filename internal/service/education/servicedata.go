@@ -1,4 +1,4 @@
-package servicedata
+package education
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ type operationData struct{
 	ProductID uint64
 	OperationType int
 }
-var editedChat = make(map[int64]operationData, 100)
+var editedChat = make(map[int64]operationData, EditedChatCountToStart)
 
 func DeleteEditedChatElement(Key int64) {
 	delete(editedChat, Key)
@@ -45,7 +45,6 @@ func AddOperationDataInEditedChat(Key int64, productID uint64, operationType int
 }
 
 func (s *operationData) String() string {
-	log.Println("Структура operationData ввиде строки")
 	OperationName := ""
 	switch s.OperationType {
 	case NewOperationData:

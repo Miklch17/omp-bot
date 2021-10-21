@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/ozonmp/omp-bot/internal/model/education"
-	"github.com/ozonmp/omp-bot/internal/service/education/servicedata"
+	education2 "github.com/ozonmp/omp-bot/internal/service/education"
 	"log"
 	"strconv"
 	"strings"
@@ -13,7 +13,7 @@ import (
 func (s *DummySolutionService) CreateNewID() uint64 {
 	log.Println("Получить следующий ID для записи, скорее всего потокоНЕбезопастна, но потоки еще не проходили")
 	max := uint64(0)
-	for i := range *education.GetData() {
+	for i := range *education.GetSolution() {
 		if max < i {max = i}
 	}
 	return max + 1
@@ -21,7 +21,7 @@ func (s *DummySolutionService) CreateNewID() uint64 {
 
 func (s *DummySolutionService) Len() uint64 {
 	log.Println("Получаем длинну данных")
-	return uint64(len(*education.GetData()))
+	return uint64(len(*education.GetSolution()))
 }
 
 const errorMessageFormat = "Внимательно ознакомьтесь с подсказкой, переданные данные не соотвествуют ни одному из " +
@@ -48,7 +48,7 @@ func SimpleInputData(inputMessage *tgbotapi.Message, data []string)  (education.
 		textMsg = errorMessageFormat
 		return education.Solution{}, textMsg
 	}
-	idx, _ := servicedata.GetEditedChatElement(inputMessage.Chat.ID)
+	idx, _ := education2.GetEditedChatElement(inputMessage.Chat.ID)
 	log.Println("Похоже пришло просто 3 строки - успешно преобразовали")
 	return education.Solution{
 		ID:          idx.ProductID,
@@ -90,7 +90,7 @@ func LabelInputData(inputMessage *tgbotapi.Message, data []string)  (education.S
 		textMsg = errorMessageFormat
 		return education.Solution{}, textMsg
 	}
-	idx, _ := servicedata.GetEditedChatElement(inputMessage.Chat.ID)
+	idx, _ := education2.GetEditedChatElement(inputMessage.Chat.ID)
 	log.Println("Похоже пришло 3 строки с метками - успешно преобразовали")
 	return education.Solution{
 		ID:          idx.ProductID,
@@ -113,7 +113,7 @@ func (s *DummySolutionService) DecodeMessage(inputMessage *tgbotapi.Message) (ed
 	err := json.Unmarshal([]byte(inputMessage.Text), &parsedData)
 	if err == nil {
 		//Тут вариант с json
-		idx, _ := servicedata.GetEditedChatElement(inputMessage.Chat.ID)
+		idx, _ := education2.GetEditedChatElement(inputMessage.Chat.ID)
 		parsedData.ID = idx.ProductID
 		log.Println("пришел json")
 		return parsedData, textMsg

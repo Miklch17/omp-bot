@@ -1,6 +1,9 @@
 package education
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/ozonmp/omp-bot/internal/service/education"
+)
 
 type Solution struct {
 	ID     uint64
@@ -15,12 +18,12 @@ func (c Solution) String() string{
 
 var data map[uint64]Solution
 
-func GetData() *map[uint64]Solution {
+func GetSolution() *map[uint64]Solution {
 	return &data
 }
 
 func init() {
-	data = make(map[uint64]Solution, 100)
+	data = make(map[uint64]Solution, education.DataElementCountToStart)
 	data[1] = Solution{1, 100, 111, "Cool Description 1"}
 	data[2] = Solution{2, 200, 222, "Cool Description 2"}
 	data[3] = Solution{3, 300, 333, "Cool Description 3"}

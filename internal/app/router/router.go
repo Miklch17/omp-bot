@@ -3,8 +3,7 @@ package router
 import (
 	"github.com/ozonmp/omp-bot/internal/app/commands/demo"
 	"github.com/ozonmp/omp-bot/internal/app/commands/education"
-	"github.com/ozonmp/omp-bot/internal/service/education/serviceconsts"
-	"github.com/ozonmp/omp-bot/internal/service/education/servicedata"
+	education2 "github.com/ozonmp/omp-bot/internal/service/education"
 	"log"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -117,58 +116,32 @@ func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
 	switch callbackPath.Domain {
 	case "demo":
 		c.demoCommander.HandleCallback(callback, callbackPath)
-		break
 	case "user":
-		break
 	case "access":
-		break
 	case "buy":
-		break
 	case "delivery":
-		break
 	case "recommendation":
-		break
 	case "travel":
-		break
 	case "loyalty":
-		break
 	case "bank":
-		break
 	case "subscription":
-		break
 	case "license":
-		break
 	case "insurance":
-		break
 	case "payment":
-		break
 	case "storage":
-		break
 	case "streaming":
-		break
 	case "business":
-		break
 	case "work":
-		break
 	case "service":
-		break
 	case "exchange":
-		break
 	case "estate":
-		break
 	case "rating":
-		break
 	case "security":
-		break
 	case "cinema":
-		break
 	case "logistic":
-		break
 	case "product":
-		break
-	case serviceconsts.Education:
+	case education2.Education:
 		c.EducationCommander.HandleCallback(callback, callbackPath)
-		break
 	default:
 		log.Printf("Router.handleCallback: unknown domain - %s", callbackPath.Domain)
 	}
@@ -178,11 +151,11 @@ func (c *Router) handleMessage(msg *tgbotapi.Message) {
 	var commandPath path.CommandPath
 	var err error
 	//Вот тут тоже не уверен что правильно так реализовывать
-	if servicedata.IsHaveEditedChatElement(msg.Chat.ID) {
+	if education2.IsHaveEditedChatElement(msg.Chat.ID) {
 		commandPath = path.CommandPath{
 			CommandName: "",
-			Domain:      serviceconsts.Education,
-			Subdomain:   serviceconsts.Solution,
+			Domain:      education2.Education,
+			Subdomain:   education2.Solution,
 		}
 	} else {
 		if !msg.IsCommand() {
@@ -200,58 +173,32 @@ func (c *Router) handleMessage(msg *tgbotapi.Message) {
 	switch commandPath.Domain {
 	case "demo":
 		c.demoCommander.HandleCommand(msg, commandPath)
-		break
 	case "user":
-		break
 	case "access":
-		break
 	case "buy":
-		break
 	case "delivery":
-		break
 	case "recommendation":
-		break
 	case "travel":
-		break
 	case "loyalty":
-		break
 	case "bank":
-		break
 	case "subscription":
-		break
 	case "license":
-		break
 	case "insurance":
-		break
 	case "payment":
-		break
 	case "storage":
-		break
 	case "streaming":
-		break
 	case "business":
-		break
 	case "work":
-		break
 	case "service":
-		break
 	case "exchange":
-		break
 	case "estate":
-		break
 	case "rating":
-		break
 	case "security":
-		break
 	case "cinema":
-		break
 	case "logistic":
-		break
 	case "product":
-		break
-	case serviceconsts.Education:
+	case education2.Education:
 		c.EducationCommander.HandleCommand(msg, commandPath)
-		break
 	default:
 		log.Printf("Router.handleCallback: unknown domain - %s", commandPath.Domain)
 	}

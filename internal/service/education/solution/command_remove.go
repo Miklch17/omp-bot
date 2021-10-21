@@ -8,10 +8,10 @@ import (
 
 func (s *DummySolutionService) Remove(SolutionId uint64) (bool, error) {
 	log.Println("Пытаемся удалить запись")
-	if _, ok := (*education.GetData())[SolutionId]; !ok {
+	if _, ok := (*education.GetSolution())[SolutionId]; !ok {
 		return false, fmt.Errorf("item not found")
 	}
-	delete((*education.GetData()), SolutionId)
+	delete((*education.GetSolution()), SolutionId)
 	log.Println("Запись успешно удалена")
 	return true, nil
 }
