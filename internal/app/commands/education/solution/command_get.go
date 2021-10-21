@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func (c *SolutionCommander) Get(inputMsg *tgbotapi.Message){
+func (c *SolutionCommanderStruct) Get(inputMsg *tgbotapi.Message){
 	log.Println("Попытка показать запись")
 	textMsg := ""
 	defer func() {

@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func (c *SolutionCommander) Delete(inputMsg *tgbotapi.Message){
+func (c *SolutionCommanderStruct) Delete(inputMsg *tgbotapi.Message){
 	log.Println("Попытка удалить документ")
 	textMsg := ""
 	defer func() {

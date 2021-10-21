@@ -15,7 +15,7 @@ type EducationCommander interface {
 
 type EducationCommanderStruct struct {
 	bot                *tgbotapi.BotAPI
-	SolutionCommander solution.Solution_Commander
+	SolutionCommander solution.SolutionCommander
 }
 
 func NewEducationCommander(
@@ -23,7 +23,7 @@ func NewEducationCommander(
 ) *EducationCommanderStruct {
 	return &EducationCommanderStruct{
 		bot: bot,
-		// SolutionCommander
+		// SolutionCommanderStruct
 		SolutionCommander: solution.NewSolutionCommander(bot),
 	}
 }

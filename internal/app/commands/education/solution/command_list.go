@@ -13,7 +13,7 @@ const (
 	StartShowElementNumber = 0
 	OffsetShowElementNumber = 2
 )
-func (c *SolutionCommander) List(inputMsg *tgbotapi.Message){
+func (c *SolutionCommanderStruct) List(inputMsg *tgbotapi.Message){
 	log.Println("Пытаемся отразить 1 страницу списка и кнопку продолжения")
 	cb := CallbackListData{ StartShowElementNumber, OffsetShowElementNumber}
 	data, _ := json.Marshal(cb)

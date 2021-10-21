@@ -3,16 +3,15 @@ package education
 import (
 	"fmt"
 	"log"
-	"strconv"
 )
 
 const (
-	NewOperationData = iota
-	EditOperationData
+	NewOperationData = "new_commit"
+	EditOperationData = "edit_commit"
 )
 type operationData struct{
 	ProductID uint64
-	OperationType int
+	OperationType string
 }
 var editedChat = make(map[int64]operationData, EditedChatCountToStart)
 
@@ -36,7 +35,7 @@ func GetEditedChatElement(Key int64) (*operationData, error) {
 	}
 }
 
-func AddOperationDataInEditedChat(Key int64, productID uint64, operationType int) {
+func AddOperationDataInEditedChat(Key int64, productID uint64, operationType string) {
 	log.Println("инициализация структуры operationData")
 	editedChat[Key] = operationData{
 		ProductID: productID,
@@ -52,7 +51,7 @@ func (s *operationData) String() string {
 	case EditOperationData:
 		OperationName = "Edit"
 	default:
-		OperationName = "Unknown:" + strconv.Itoa(s.OperationType)
+		OperationName = "Unknown:" + s.OperationType
 	}
 	return fmt.Sprintf("Тип операции: %s, для ID = %d", OperationName, s.ProductID)
 }

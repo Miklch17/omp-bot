@@ -149,11 +149,10 @@ func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
 
 func (c *Router) handleMessage(msg *tgbotapi.Message) {
 	var commandPath path.CommandPath
-	var err error
 	//Вот тут тоже не уверен что правильно так реализовывать
-	if education2.IsHaveEditedChatElement(msg.Chat.ID) {
+	if item, err := education2.GetEditedChatElement(msg.Chat.ID); err == nil {
 		commandPath = path.CommandPath{
-			CommandName: "",
+			CommandName: item.OperationType,
 			Domain:      education2.Education,
 			Subdomain:   education2.Solution,
 		}

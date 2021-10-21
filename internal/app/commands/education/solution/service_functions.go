@@ -11,7 +11,7 @@ func OneCommandName(Begin string) string{
 	return fmt.Sprintf("/%s__education__solution", Begin)
 }
 
-func (c *SolutionCommander) SendMessage(inputMsg *tgbotapi.Message, msgtext string){
+func (c *SolutionCommanderStruct) SendMessage(inputMsg *tgbotapi.Message, msgtext string){
 	msg := tgbotapi.NewMessage(inputMsg.Chat.ID, msgtext)
 	c.bot.Send(msg)
 }

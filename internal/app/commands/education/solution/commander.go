@@ -7,19 +7,21 @@ import (
 	"log"
 )
 
-type SolutionCommander struct {
+type SolutionCommanderStruct struct {
 	bot              *tgbotapi.BotAPI
 	SolutionService *solution.DummySolutionService
 }
 
-type Solution_Commander interface {
+type SolutionCommander interface {
 	Help(inputMsg *tgbotapi.Message)
 	Get(inputMsg *tgbotapi.Message)
 	List(inputMsg *tgbotapi.Message)
 	Delete(inputMsg *tgbotapi.Message)
 
 	New(inputMsg *tgbotapi.Message)
+	NewCommit(inputMsg *tgbotapi.Message)
 	Edit(inputMsg *tgbotapi.Message)
+	EditCommit(inputMsg *tgbotapi.Message)
 	HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath)
 	HandleCommand(message *tgbotapi.Message, commandPath path.CommandPath)
 }
@@ -29,15 +31,15 @@ type CallbackListData struct {
 	Offset uint64 `json:"offset"`
 }
 
-func NewSolutionCommander(bot *tgbotapi.BotAPI, ) *SolutionCommander {
+func NewSolutionCommander(bot *tgbotapi.BotAPI, ) *SolutionCommanderStruct {
 	service := solution.NewDummySolutionService()
-	return &SolutionCommander{
+	return &SolutionCommanderStruct{
 		bot:             bot,
 		SolutionService: service,
 	}
 }
 
-func (c *SolutionCommander) HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
+func (c *SolutionCommanderStruct) HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
 	switch callbackPath.CallbackName {
 	case "list":
 		c.CallbackList(callback, callbackPath)
@@ -46,7 +48,7 @@ func (c *SolutionCommander) HandleCallback(callback *tgbotapi.CallbackQuery, cal
 	}
 }
 
-func (c *SolutionCommander) HandleCommand(msg *tgbotapi.Message, commandPath path.CommandPath) {
+func (c *SolutionCommanderStruct) HandleCommand(msg *tgbotapi.Message, commandPath path.CommandPath) {
 	switch commandPath.CommandName {
 	case "help":
 		c.Help(msg)
@@ -60,6 +62,10 @@ func (c *SolutionCommander) HandleCommand(msg *tgbotapi.Message, commandPath pat
 		c.New(msg)
 	case "edit":
 		c.Edit(msg)
+	case "edit_commit":
+		c.EditCommit(msg)
+	case "new_commit":
+		c.NewCommit(msg)
 	default:
 		c.Default(msg)
 	}

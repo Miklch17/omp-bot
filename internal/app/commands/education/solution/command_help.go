@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func (c *SolutionCommander) Help(inputMsg *tgbotapi.Message){
+func (c *SolutionCommanderStruct) Help(inputMsg *tgbotapi.Message){
 	log.Println("Пытаемся отобразить помощь")
 	c.SendMessage(inputMsg, OneCommandName("help") + " - Эта справка\n"+
 		OneCommandName("get") + " - получить элемент по номеру\n"+

@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-func (c *SolutionCommander) Edit(inputMsg *tgbotapi.Message){
+func (c *SolutionCommanderStruct) Edit(inputMsg *tgbotapi.Message){
 	log.Println("Попытка начать редактирование записи")
 	textMsg := ""
 	defer func() {

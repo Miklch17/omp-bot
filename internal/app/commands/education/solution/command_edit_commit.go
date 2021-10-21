@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func (c *SolutionCommander) editCommit(inputMessage *tgbotapi.Message) {
+func (c *SolutionCommanderStruct) EditCommit(inputMessage *tgbotapi.Message) {
 	log.Println("Пытаемся завершить редактирование")
 	textMsg := ""
 	defer func() {

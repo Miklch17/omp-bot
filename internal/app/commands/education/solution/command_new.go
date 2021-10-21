@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-func (c *SolutionCommander) New(inputMsg *tgbotapi.Message){
+func (c *SolutionCommanderStruct) New(inputMsg *tgbotapi.Message){
 	log.Println("Пытаемся запусть создание новой записи")
 	education2.AddOperationDataInEditedChat(inputMsg.Chat.ID, 0, education2.NewOperationData)
 	TextMsg := "Добавление новой записи.\n" + education.DescriptionNewOrEditCommand

@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func (c *SolutionCommander) CallbackList(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
+func (c *SolutionCommanderStruct) CallbackList(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
 	log.Println("Пытаемся отразить следующую страницу")
 	parsedData := CallbackListData{}
 	json.Unmarshal([]byte(callbackPath.CallbackData), &parsedData)
