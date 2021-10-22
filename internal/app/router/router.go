@@ -1,14 +1,21 @@
 package router
 
 import (
+	"github.com/ozonmp/omp-bot/internal/app/commands/demo"
+	"github.com/ozonmp/omp-bot/internal/app/commands/education"
+	model "github.com/ozonmp/omp-bot/internal/service/education"
 	"log"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	"github.com/ozonmp/omp-bot/internal/app/commands/demo"
 	"github.com/ozonmp/omp-bot/internal/app/path"
 )
 
 type Commander interface {
+	HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath)
+	HandleCommand(callback *tgbotapi.Message, commandPath path.CommandPath)
+}
+
+type EducationCommander interface {
 	HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath)
 	HandleCommand(callback *tgbotapi.Message, commandPath path.CommandPath)
 }
@@ -18,7 +25,7 @@ type Router struct {
 	bot *tgbotapi.BotAPI
 
 	// demoCommander
-	demoCommander Commander
+	 demoCommander Commander
 	// user
 	// access
 	// buy
@@ -44,6 +51,7 @@ type Router struct {
 	// logistic
 	// product
 	// education
+	EducationCommander EducationCommander
 }
 
 func NewRouter(
@@ -53,7 +61,7 @@ func NewRouter(
 		// bot
 		bot: bot,
 		// demoCommander
-		demoCommander: demo.NewDemoCommander(bot),
+		 demoCommander: demo.NewDemoCommander(bot),
 		// user
 		// access
 		// buy
@@ -79,6 +87,7 @@ func NewRouter(
 		// logistic
 		// product
 		// education
+		EducationCommander: education.NewEducationCommander(bot),
 	}
 }
 
@@ -108,126 +117,87 @@ func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
 	case "demo":
 		c.demoCommander.HandleCallback(callback, callbackPath)
 	case "user":
-		break
 	case "access":
-		break
 	case "buy":
-		break
 	case "delivery":
-		break
 	case "recommendation":
-		break
 	case "travel":
-		break
 	case "loyalty":
-		break
 	case "bank":
-		break
 	case "subscription":
-		break
 	case "license":
-		break
 	case "insurance":
-		break
 	case "payment":
-		break
 	case "storage":
-		break
 	case "streaming":
-		break
 	case "business":
-		break
 	case "work":
-		break
 	case "service":
-		break
 	case "exchange":
-		break
 	case "estate":
-		break
 	case "rating":
-		break
 	case "security":
-		break
 	case "cinema":
-		break
 	case "logistic":
-		break
 	case "product":
-		break
-	case "education":
-		break
+	case model.Education:
+		c.EducationCommander.HandleCallback(callback, callbackPath)
 	default:
 		log.Printf("Router.handleCallback: unknown domain - %s", callbackPath.Domain)
 	}
 }
 
 func (c *Router) handleMessage(msg *tgbotapi.Message) {
-	if !msg.IsCommand() {
-		c.showCommandFormat(msg)
+	var commandPath path.CommandPath
+	//Вот тут тоже не уверен что правильно так реализовывать
+	if item, err := model.GetEditedChatElement(msg.Chat.ID); err == nil {
+		commandPath = path.CommandPath{
+			CommandName: item.OperationType,
+			Domain:      model.Education,
+			Subdomain:   model.Solution,
+		}
+	} else {
+		if !msg.IsCommand() {
+			c.showCommandFormat(msg)
 
-		return
-	}
-
-	commandPath, err := path.ParseCommand(msg.Command())
-	if err != nil {
-		log.Printf("Router.handleCallback: error parsing callback data `%s` - %v", msg.Command(), err)
-		return
+			return
+		}
+		commandPath, err = path.ParseCommand(msg.Command())
+		if err != nil {
+			log.Printf("Router.handleCallback: error parsing callback data `%s` - %v", msg.Command(), err)
+			return
+		}
 	}
 
 	switch commandPath.Domain {
 	case "demo":
 		c.demoCommander.HandleCommand(msg, commandPath)
 	case "user":
-		break
 	case "access":
-		break
 	case "buy":
-		break
 	case "delivery":
-		break
 	case "recommendation":
-		break
 	case "travel":
-		break
 	case "loyalty":
-		break
 	case "bank":
-		break
 	case "subscription":
-		break
 	case "license":
-		break
 	case "insurance":
-		break
 	case "payment":
-		break
 	case "storage":
-		break
 	case "streaming":
-		break
 	case "business":
-		break
 	case "work":
-		break
 	case "service":
-		break
 	case "exchange":
-		break
 	case "estate":
-		break
 	case "rating":
-		break
 	case "security":
-		break
 	case "cinema":
-		break
 	case "logistic":
-		break
 	case "product":
-		break
-	case "education":
-		break
+	case model.Education:
+		c.EducationCommander.HandleCommand(msg, commandPath)
 	default:
 		log.Printf("Router.handleCallback: unknown domain - %s", commandPath.Domain)
 	}
