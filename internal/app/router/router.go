@@ -3,7 +3,7 @@ package router
 import (
 	"github.com/ozonmp/omp-bot/internal/app/commands/demo"
 	"github.com/ozonmp/omp-bot/internal/app/commands/education"
-	education2 "github.com/ozonmp/omp-bot/internal/service/education"
+	model "github.com/ozonmp/omp-bot/internal/service/education"
 	"log"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -140,7 +140,7 @@ func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
 	case "cinema":
 	case "logistic":
 	case "product":
-	case education2.Education:
+	case model.Education:
 		c.EducationCommander.HandleCallback(callback, callbackPath)
 	default:
 		log.Printf("Router.handleCallback: unknown domain - %s", callbackPath.Domain)
@@ -150,11 +150,11 @@ func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
 func (c *Router) handleMessage(msg *tgbotapi.Message) {
 	var commandPath path.CommandPath
 	//Вот тут тоже не уверен что правильно так реализовывать
-	if item, err := education2.GetEditedChatElement(msg.Chat.ID); err == nil {
+	if item, err := model.GetEditedChatElement(msg.Chat.ID); err == nil {
 		commandPath = path.CommandPath{
 			CommandName: item.OperationType,
-			Domain:      education2.Education,
-			Subdomain:   education2.Solution,
+			Domain:      model.Education,
+			Subdomain:   model.Solution,
 		}
 	} else {
 		if !msg.IsCommand() {
@@ -196,7 +196,7 @@ func (c *Router) handleMessage(msg *tgbotapi.Message) {
 	case "cinema":
 	case "logistic":
 	case "product":
-	case education2.Education:
+	case model.Education:
 		c.EducationCommander.HandleCommand(msg, commandPath)
 	default:
 		log.Printf("Router.handleCallback: unknown domain - %s", commandPath.Domain)
